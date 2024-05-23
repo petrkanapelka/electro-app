@@ -19,3 +19,10 @@ button {
     margin-bottom: 20px;
     margin-right: 10px;
 }
+
+.Container {
+  max-width: 1440;
+  width: 100%;
+  padding: 0 10px;
+  margin: 0 auto;
+}
