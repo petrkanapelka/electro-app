@@ -56,8 +56,8 @@ const Question: React.FC<QuestionProps> = ({
                     ? 'green'
                     : 'red'
                   : answer.id === correctAnswer
-                  ? 'green'
-                  : ''
+                    ? 'green'
+                    : ''
                 : '',
               color: isAnswered ? 'white' : 'black',
               marginBottom: '10px',
@@ -149,7 +149,11 @@ const Quiz: React.FC<QuizProps> = ({ questions }) => {
 };
 
 const App: React.FC = () => {
-  return <Quiz questions={questions} />;
+  return (
+    <div className='Container'>
+      <Quiz questions={questions} />
+    </div>
+  );
 };
 
 export default App;
