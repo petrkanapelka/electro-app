@@ -126,7 +126,7 @@ const Quiz: React.FC<QuizProps> = ({ questions }) => {
 
   return (
     <div>
-      <h2>Счет: {score} из {questions.length}</h2>
+      <h2>Правильных ответов: {score} из {questions.length}</h2>
       {currentQuestion ? (
         <Question
           question={currentQuestion.question}
@@ -143,7 +143,7 @@ const Quiz: React.FC<QuizProps> = ({ questions }) => {
       ) : (
         <h2>Ваш финальный счет: {score} из {questions.length}</h2>
       )}
-      <button onClick={handleReset}>Reset</button>
+      <button onClick={handleReset}>Сбросить результат</button>
     </div>
   );
 };
