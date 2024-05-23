@@ -68,8 +68,8 @@ const Question: React.FC<QuestionProps> = ({
         ))}
       </div>
       <div>
-        <button onClick={onPrev} disabled={!isAnswered}>Prev Question</button>
-        <button onClick={onNext} disabled={!isAnswered}>Next Question</button>
+        <button onClick={onPrev} disabled={!isAnswered}>Предыдущий</button>
+        <button onClick={onNext} disabled={!isAnswered}>Следующий</button>
       </div>
     </div>
   );
