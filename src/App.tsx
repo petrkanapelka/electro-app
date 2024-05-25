@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { questions } from './Questions';
 
@@ -57,8 +58,8 @@ const Question: React.FC<QuestionProps> = ({
                     ? 'green'
                     : 'red'
                   : answer.id === correctAnswer
-                  ? 'green'
-                  : ''
+                    ? 'green'
+                    : '#aaaaaa'
                 : '',
               color: isAnswered ? 'white' : 'black',
               marginBottom: '10px',
@@ -97,6 +98,7 @@ const Quiz: React.FC<QuizProps> = ({ questions }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [score, setScore] = React.useState(0);
   const [answersState, setAnswersState] = React.useState<AnswersState>({});
+  const [isFinished, setIsFinished] = React.useState(false);
 
   const handleAnswer = (isCorrect: boolean, selectedId: number) => {
     setAnswersState((prevState: AnswersState) => ({
@@ -108,6 +110,11 @@ const Quiz: React.FC<QuizProps> = ({ questions }) => {
     }));
     if (isCorrect) {
       setScore(score + 1);
+    }
+
+    const allAnswered = Object.keys(answersState).length === questions.length - 1;
+    if (allAnswered) {
+      setIsFinished(true);
     }
   };
 
@@ -144,6 +151,7 @@ const Quiz: React.FC<QuizProps> = ({ questions }) => {
     setCurrentQuestionIndex(0);
     setScore(0);
     setAnswersState({});
+    setIsFinished(false);
   };
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -152,34 +160,37 @@ const Quiz: React.FC<QuizProps> = ({ questions }) => {
   return (
     <div className='quiz'>
       <h2>
-        Правильных ответов: {score} из {questions.length}
+        Правильно: {score} из {questions.length}
       </h2>
-      <input
-        type='number'
-        min='1'
-        max={questions.length}
-        value={currentQuestionIndex + 1}
-        onChange={e => handleJump(Number(e.target.value) - 1)}
-      />
-      {currentQuestion ? (
-        <Question
-          question={currentQuestion.question}
-          answers={currentQuestion.answers}
-          correctAnswer={currentQuestion.correctAnswer}
-          onAnswer={handleAnswer}
-          onNext={handleNext}
-          onPrev={handlePrev}
-          isAnswered={currentAnswersState?.isAnswered || false}
-          selectedAnswer={currentAnswersState?.selectedAnswer || null}
-          questionIndex={currentQuestionIndex}
-          totalQuestions={questions.length}
+      <div className='controllers'>
+        <input
+          type='number'
+          min='1'
+          max={questions.length}
+          value={currentQuestionIndex + 1}
+          onChange={e => handleJump(Number(e.target.value) - 1)}
         />
+        <button className='reset' onClick={handleReset}>Сбросить результат</button>
+      </div>
+      {isFinished ? (
+        <h2>Ваш финальный счет: {score} из {questions.length}</h2>
       ) : (
-        <h2>
-          Ваш финальный счет: {score} из {questions.length}
-        </h2>
+        currentQuestion && (
+          <Question
+            question={currentQuestion.question}
+            answers={currentQuestion.answers}
+            correctAnswer={currentQuestion.correctAnswer}
+            onAnswer={handleAnswer}
+            onNext={handleNext}
+            onPrev={handlePrev}
+            isAnswered={currentAnswersState?.isAnswered || false}
+            selectedAnswer={currentAnswersState?.selectedAnswer || null}
+            questionIndex={currentQuestionIndex}
+            totalQuestions={questions.length}
+          />
+        )
       )}
-      <button onClick={handleReset}>Сбросить результат</button>
+      {/* <button onClick={handleReset}>Сбросить результат</button> */}
     </div>
   );
 };
