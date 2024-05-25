@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/electro-app/static/css/main.6e70deaf.css",
-    "main.js": "/electro-app/static/js/main.262eafdf.js",
+    "main.css": "/electro-app/static/css/main.0d30d279.css",
+    "main.js": "/electro-app/static/js/main.f49bfc7c.js",
     "static/js/453.ed3810f9.chunk.js": "/electro-app/static/js/453.ed3810f9.chunk.js",
     "index.html": "/electro-app/index.html",
-    "main.6e70deaf.css.map": "/electro-app/static/css/main.6e70deaf.css.map",
-    "main.262eafdf.js.map": "/electro-app/static/js/main.262eafdf.js.map",
+    "main.0d30d279.css.map": "/electro-app/static/css/main.0d30d279.css.map",
+    "main.f49bfc7c.js.map": "/electro-app/static/js/main.f49bfc7c.js.map",
     "453.ed3810f9.chunk.js.map": "/electro-app/static/js/453.ed3810f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.6e70deaf.css",
-    "static/js/main.262eafdf.js"
+    "static/css/main.0d30d279.css",
+    "static/js/main.f49bfc7c.js"
   ]
 }
