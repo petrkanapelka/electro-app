@@ -17,7 +17,7 @@ body {
 button {
   font-size: 16px;
   text-align: left;
-  padding: 10px 15px;
+  padding: 5px 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -31,7 +31,7 @@ button:hover {
 }
 
 .answerButton {
-  width: 100%;
+  min-width: 100%;
   box-sizing: border-box;
 }
 
@@ -58,4 +58,14 @@ button:hover {
   button {
     font-size: 14px;
   }
+}
+
+.controllers {
+  display: flex;
+  justify-content: space-between;
+  align-items:center;
+}
+
+.reset {
+  margin: 0;
 }
