@@ -44,8 +44,9 @@ const Question: React.FC<QuestionProps> = ({
       </h2>
       <h3>{question}</h3>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        {answers.map((answer) => (
+        {answers.map(answer => (
           <button
+            className='answerButton'
             key={answer.id}
             onClick={() => handleAnswer(answer)}
             disabled={isAnswered}
@@ -56,8 +57,8 @@ const Question: React.FC<QuestionProps> = ({
                     ? 'green'
                     : 'red'
                   : answer.id === correctAnswer
-                    ? 'green'
-                    : ''
+                  ? 'green'
+                  : ''
                 : '',
               color: isAnswered ? 'white' : 'black',
               marginBottom: '10px',
@@ -68,8 +69,8 @@ const Question: React.FC<QuestionProps> = ({
         ))}
       </div>
       <div>
-        <button onClick={onPrev} disabled={!isAnswered}>Предыдущий</button>
-        <button onClick={onNext} disabled={!isAnswered}>Следующий</button>
+        <button onClick={onPrev}>Предыдущий</button>
+        <button onClick={onNext}>Следующий</button>
       </div>
     </div>
   );
@@ -83,15 +84,28 @@ interface QuizProps {
   }[];
 }
 
+interface AnswerState {
+  isAnswered: boolean;
+  selectedAnswer: number | null;
+}
+
+interface AnswersState {
+  [key: number]: AnswerState;
+}
+
 const Quiz: React.FC<QuizProps> = ({ questions }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [score, setScore] = React.useState(0);
-  const [isAnswered, setIsAnswered] = React.useState(false);
-  const [selectedAnswer, setSelectedAnswer] = React.useState<number | null>(null);
+  const [answersState, setAnswersState] = React.useState<AnswersState>({});
 
   const handleAnswer = (isCorrect: boolean, selectedId: number) => {
-    setSelectedAnswer(selectedId);
-    setIsAnswered(true);
+    setAnswersState((prevState: AnswersState) => ({
+      ...prevState,
+      [currentQuestionIndex]: {
+        isAnswered: true,
+        selectedAnswer: selectedId,
+      },
+    }));
     if (isCorrect) {
       setScore(score + 1);
     }
@@ -100,33 +114,53 @@ const Quiz: React.FC<QuizProps> = ({ questions }) => {
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setIsAnswered(false);
-      setSelectedAnswer(null);
     } else {
-      alert(`Ваш счет: ${score} из ${questions.length}`);
+      setCurrentQuestionIndex(0);
     }
   };
 
   const handlePrev = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setIsAnswered(false);
-      setSelectedAnswer(null);
+    } else {
+      setCurrentQuestionIndex(questions.length - 1);
+    }
+  };
+
+  const handleJump = (index: number) => {
+    if (index >= 0 && index < questions.length) {
+      setCurrentQuestionIndex(index);
+      setAnswersState((prevState: AnswersState) => ({
+        ...prevState,
+        [index]: prevState[index] || {
+          isAnswered: false,
+          selectedAnswer: null,
+        },
+      }));
     }
   };
 
   const handleReset = () => {
     setCurrentQuestionIndex(0);
     setScore(0);
-    setIsAnswered(false);
-    setSelectedAnswer(null);
+    setAnswersState({});
   };
 
   const currentQuestion = questions[currentQuestionIndex];
+  const currentAnswersState = answersState[currentQuestionIndex];
 
   return (
-    <div>
-      <h2>Правильных ответов: {score} из {questions.length}</h2>
+    <div className='quiz'>
+      <h2>
+        Правильных ответов: {score} из {questions.length}
+      </h2>
+      <input
+        type='number'
+        min='1'
+        max={questions.length}
+        value={currentQuestionIndex + 1}
+        onChange={e => handleJump(Number(e.target.value) - 1)}
+      />
       {currentQuestion ? (
         <Question
           question={currentQuestion.question}
@@ -135,13 +169,15 @@ const Quiz: React.FC<QuizProps> = ({ questions }) => {
           onAnswer={handleAnswer}
           onNext={handleNext}
           onPrev={handlePrev}
-          isAnswered={isAnswered}
-          selectedAnswer={selectedAnswer}
+          isAnswered={currentAnswersState?.isAnswered || false}
+          selectedAnswer={currentAnswersState?.selectedAnswer || null}
           questionIndex={currentQuestionIndex}
           totalQuestions={questions.length}
         />
       ) : (
-        <h2>Ваш финальный счет: {score} из {questions.length}</h2>
+        <h2>
+          Ваш финальный счет: {score} из {questions.length}
+        </h2>
       )}
       <button onClick={handleReset}>Сбросить результат</button>
     </div>
